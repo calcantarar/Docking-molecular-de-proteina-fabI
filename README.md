@@ -6,4 +6,6 @@ Proyecto de curso de Bioinformática de UNMSM. Se modeló el complejo enzimátic
 2) Modelado de la proteina como tetrámero por homología unitaria usando SWISS-MODEL (https://swissmodel.expasy.org/), considerando los mejores scores, plots de Ramachadran y observaciones adicionales.
 3) Descarga del archivo .pbd del molde y modelo
 4) Ejercución complejo_enzimatico.py (tener instalado pymol-opensource en terminal)
-5) 
+5) Preparación de los ligandos
+6) Docking de cada ligando con el complejo enzimático
+7) Evaluación de las interacciones atómicas en Discovery Studio y VMD
