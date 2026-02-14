@@ -1,2 +1,38 @@
 # Generalidades 
-Proyecto de curso de Bioinformática de UNMSM. Se modeló el complejo enzimático de fabI y evaluó la afinidad de 3 ligandos en un sitio activo representativo para ver la efectividad como potencial fármaco. Asimismo se evaluó su efectividad como potencial ligando competitivo contra NADH (cofactor de fabI).
+Proyecto de curso de Bioinformática de UNMSM. Se modeló el complejo enzimático de fabI y evaluó la afinidad de 3 ligandos (Triclosan, Nilofabicin y 2-Hydroxydiphenyl ether) en un sitio activo representativo para ver la efectividad como potencial fármaco. Asimismo, se evaluó su efectividad como potencial ligando competitivo contra NADH (cofactor de fabI).
+
+# Instrucciones
+#### Requerimientos en env
+Python >= 3.8
+Meeko
+RDKit
+AutoDock Vina
+PyMOL
+OpenBabel
+
+### Procedimiento
+Preparación de ligandos
+1) Ejecutar "*_from_smiles.py" de cada ligando (Triclosan, Nilofabicin y 2-Hydroxydiphenyl ether) y cofactor (NADH) para obtener archivos  .sdf y .pdb
+2) Preparar cada ligando y cofactor usando "mk_prepare_ligand.py" de Meeko para obtener archivos .pdbqt
+ - Ejecutar: "mk_prepare_ligand.py -i *.sdf -o *.pdbqt --charge_model gasteiger"
+
+#### Preparación de complejo enzimático
+1) Revisar los sitios de unión del receptor (fabI.pdb) en P2Rank (https://prankweb.cz) y anotar los 4 pocket center del sitio con mejor score
+ Pocket centers: 
+ - (-16.0724, 3.9547, 56.9830)
+ - (11.4396, 25.9886, 37.9328)
+ - (9.7593, -14.0739, 52.2553)
+ - (19.5914, 19.4647, 68.0222)
+2) Preparar el receptor usando "mk_prepare_receptor.py --read_pdb fabI.pdb --write_pdbqt fabI.pdbqt" de Meeko
+3) Ejecutar Autodock Vina con "vina --config NADH*_config.txt --out complejo*.pdbqt" con cada configuración de NADH
+4) Abrir los 4 resultados (complejo*.pdbqt) en PyMOL y fabI.pdbqt para ejercutar los siguientes comandos:
+ - "create complejo_final, fabI or (complejo1 and state 1) or (complejo2 and state 1) or (complejo3 and state 1) or (complejo4 and state 1)"
+ - "save complejo_holoenzima.pdb, complejo_final" (puedes considerar poner la ruta de guardado deseada)
+
+##### Docking con diferentes ligandos
+1) Revisar los sitios de unión de la holoenzima (complejo_holoenzima.pdb) en P2Rank y anotar el pocket center del sitio con mejor score:
+ Pocket center:
+ - (-16.0724, 3.9547, 56.9830)
+2) Ejecutar "obabel complejo_holoenzima.pdb -O complejo_holoenzima.pdbqt -xr --partialcharge gasteiger" en la terminal para preparar la holoenzima
+3) Ejecutar Autodock Vina con "vina --config *_config.txt --out dock_*.pdbqt" con cada ligando. Asimismo considerar los ensayos con la holoenzima (complejo_holoenzima.pdbqt) y apoenzima (fabI.pdbqt) 
+4) Abrir los resultados y analizar las interacciones
